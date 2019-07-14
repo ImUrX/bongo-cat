@@ -6,12 +6,14 @@ os:
 jobs:
   include:
     - stage: lint
-      script: skip
-      script: npm run lint
+      script: 
+        - skip
+        - npm run lint
     - stage: compile
-      script: brew install wine
-      script: npm run compile
-      script: chmod +x compress_builds.sh && ./compress_builds.sh
+      script: 
+        - brew install wine
+        - npm run compile
+        - chmod +x compress_builds.sh && ./compress_builds.sh
       deploy:
         provider: releases
         api_key: "$GH_TOKEN"

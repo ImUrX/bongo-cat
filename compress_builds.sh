@@ -1,7 +1,6 @@
 #!/bin/sh
-for dir in ./builds/*
+cd builds
+for dir in ./*
 do
-    (cd "builds/$dir" && test -r ./ && test -w ./ && tar -czf "$dir.tar.gz" ./*)
-    rm -rf "builds/$dir"
-    echo "compressed $dir"
+    cd $dir && tar -caf "../$dir.tar.gz" * && cd - && rm -rf "$dir" && echo "compressed $dir"
 done
