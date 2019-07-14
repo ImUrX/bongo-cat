@@ -1,0 +1,53 @@
+{
+  "name": "bongo-cat",
+  "version": "1.0.0",
+  "description": "A bongo cat implementation on Electron",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "compile": "electron-packager ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ImUrX/bongo-cat.git"
+  },
+  "keywords": [
+    "bongo",
+    "cat",
+    "electron"
+  ],
+  "author": "ImUrX",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ImUrX/bongo-cat/issues"
+  },
+  "homepage": "https://github.com/ImUrX/bongo-cat#readme",
+  "devDependencies": {
+    "electron": "^5.0.6",
+    "electron-packager": "^14.0.1",
+    "electron-rebuild": "^1.8.5",
+    "eslint": "^6.0.1"
+  },
+  "dependencies": {
+    "iohook": "^0.5.1"
+  },
+  "iohook": {
+    "targets": [
+      "electron-70"
+    ],
+    "platforms": [
+      "win32",
+      "darwin",
+      "linux"
+    ],
+    "arches": [
+      "x64",
+      "ia32"
+    ]
+  },
+  "cmake-js": {
+    "runtime": "electron",
+    "runtimeVersion": "5.0.6"
+  }
+}
