@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "compile": "electron-packager ."
+    "lint": "npx eslint .",
+    "compile": "mkdir builds && npx electron-packager . --out ./builds/ --all"
   },
   "repository": {
     "type": "git",

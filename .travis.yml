@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+  "node"
+os:
+  "macos"
+jobs:
+  include:
+    - stage: lint
+      script: skip
+      script: npm run lint
+    - stage: compile
+      script: brew install wine
+      script: npm run compile
+      script: chmod +x compress_builds.sh && ./compress_builds
+      deploy:
+        provider: releases
+        api_key: "$GH_TOKEN"
+        file_glob: true
+        file: "./builds/*"
+        skip_cleanup: true
+        draft: true
+    
+    
