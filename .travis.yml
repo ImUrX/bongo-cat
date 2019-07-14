@@ -6,9 +6,7 @@ os:
 jobs:
   include:
     - stage: lint
-      script: 
-        - skip
-        - npm run lint
+      script: npm run lint
     - stage: compile
       script: 
         - brew install wine
