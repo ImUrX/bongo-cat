@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
     "lint": "npx eslint .",
-    "compile": "mkdir builds && npx electron-packager . --out ./builds/ --all"
+    "compile": "mkdir builds && electron-packager . --out ./builds/ --all"
   },
   "repository": {
     "type": "git",
