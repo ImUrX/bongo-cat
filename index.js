@@ -1,28 +1,53 @@
-const { app, BrowserWindow } = require("electron");
-const fs = require("fs");
-const path = require("path");
+const { app, BrowserWindow, Menu, MenuItem } = require("electron");
+const Store = require("electron-store");
+const schema = require("./schema.json");
 
 let win;
+
+const store = new Store({ schema });
+
+if(!store.get("hardware_acceleration")) {
+    app.disableHardwareAcceleration();
+}
+
+const menu = new Menu();
+
+menu.append(new MenuItem({
+    label: "File",
+    role: "fileMenu"
+}));
+
+menu.append(new MenuItem({
+    label: "View",
+    role: "viewMenu"
+}));
+
+menu.append(new MenuItem({
+    label: "Window",
+    role: "windowMenu"
+}));
+
+menu.append(new MenuItem({
+    label: "Configure",
+    accelerator: process.platform === "darwin" ? "Alt+Cmd+O" : "Ctrl+Shift+O",
+    click: (event, focusedWin) => focusedWin.loadFile("config.html")
+}));
 
 function createWindow() {
 
     win = new BrowserWindow({
+        width: store.get("size.width"),
+        height: store.get("size.height"),
+        autoHideMenuBar: store.get("auto_hide_menu_bar"),
         webPreferences: {
             nodeIntegration: true
         }
     });
-    fs.access("./config.json", (err) => {
-        if(err) fs.copyFileSync(path.join(__dirname, "config.json.sample"), path.join(__dirname, "config.json"));
-        const config = require("./config.json");
-        if(config.size && config.size.width && config.size.height) {
-            win.setBounds({ width: config.size.width, height: config.size.height });
-        }
-    });
+
+    win.setMenu(menu);
 
     win.loadFile("index.html");
 
-    win.removeMenu();
-  
     win.on("closed", () => win = null);
 }
 
