@@ -7,6 +7,7 @@ jobs:
     - stage: lint
       script: npm run lint
     - stage: compile
+      if: branch = master
       script: 
         - brew install wine
         - npm run compile
@@ -18,5 +19,4 @@ jobs:
         file: "./builds/*"
         skip_cleanup: true
         draft: true
-    
     

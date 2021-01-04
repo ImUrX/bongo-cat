@@ -52,6 +52,12 @@
             "right": "https://cdn.discordapp.com/attachments/409463624982331393/599853516793839640/right.png"
         }
     },
+    "osu_config_file": {
+        "title": "osu! Config File Location",
+        "description": "where the osu config file is",
+        "type": "string",
+        "default": ""
+    },
     "triggers": {
         "title": "Triggers",
         "description": "This is what triggers the images to change",
