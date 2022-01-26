@@ -14,6 +14,7 @@ lazy_static! {
     static ref CONFIG_PATH: path::PathBuf = dirs::config_dir().expect("Couldn't find default config path").join(CONFIG_FOLDER);
 }
 
+#[derive()]
 pub enum Side {
     Left,
     Right,
@@ -94,7 +95,7 @@ impl Default for Config {
             input: InputConfig {
                 keyboard_left: vec!(Keycode::Z.into(), Keycode::A.into()),
                 keyboard_right: vec!(Keycode::C.into(), Keycode::D.into()),
-                mouse_right: vec!(2),
+                mouse_right: vec!(3),
                 mouse_left: vec!(1)
             }
         }

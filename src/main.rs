@@ -15,12 +15,12 @@ enum State {
 
 struct BongoCat {
     app: app::App,
-    config: Config,
-    win: Window,
+    config: Arc<Config>,
+    _win: Window,
     frames: Frames,
     device_state: DeviceState,
     receiver: app::Receiver<State>,
-    sender: Arc<app::Sender<State>>,
+    sender: app::Sender<State>,
 }
 
 struct Frames {
@@ -51,8 +51,9 @@ impl BongoCat {
         win.end();
         win.show();
         Self {
-            app, win, device_state, config, receiver,
-            sender: Arc::new(sender),
+            app, device_state, receiver, sender,
+            _win: win,
+            config: Arc::new(config),
             frames: Frames {
                 neutral, left, right, both
             }
@@ -60,28 +61,76 @@ impl BongoCat {
     }
 
     pub fn run(mut self) {
-        let _guard = self.device_state.on_key_down(|key| {
-            if let Some(side) = self.config.side_of_key(key) {
-                self.sender.send(State::Down(side));
-            }
-        });
-        let _guard = self.device_state.on_key_up(|key| {
-            if let Some(side) = self.config.side_of_key(key) {
-                self.sender.send(State::Up(side));
-            }
-        });
-        let _guard = self.device_state.on_mouse_down(|button| {
-            if let Some(side) = self.config.side_of_button(button) {
-                self.sender.send(State::Down(side));
-            }
-        });
-        let _guard = self.device_state.on_mouse_up(|button| {
-            if let Some(side) = self.config.side_of_button(button) {
-                self.sender.send(State::Up(side));
-            }
-        });
+        let _guard = {
+            let s = self.sender.clone();
+            let config = self.config.clone();
+            self.device_state.on_key_down(move |key| {
+                if let Some(side) = config.side_of_key(key) {
+                    s.send(State::Down(side));
+                }
+            })
+        };
+        let _guard = {
+            let s = self.sender.clone();
+            let config = self.config.clone();
+            self.device_state.on_key_up(move |key| {
+                if let Some(side) = config.side_of_key(key) {
+                    s.send(State::Up(side));
+                }
+            })
+        };
+        let _guard = {
+            let s = self.sender.clone();
+            let config = self.config.clone();
+            self.device_state.on_mouse_down(move |button| {
+                if let Some(side) = config.side_of_button(button) {
+                    s.send(State::Down(side));
+                }
+            })
+        };
+        let _guard = {
+            let s = self.sender.clone();
+            let config = self.config.clone();
+            self.device_state.on_mouse_up(move |button| {
+                if let Some(side) = config.side_of_button(button) {
+                    s.send(State::Up(side));
+                }
+            })
+        };
+        let mut state = (0, 0);
         while self.app.wait() {
+            if let Some(msg) = self.receiver.recv() {
+                let previous = state.clone();
+                match msg {
+                    State::Down(side) => {
+                        match side {
+                            Side::Left => state.0 += 1,
+                            Side::Right => state.1 += 1,
+                        }
+                    }
+                    State::Up(side) => {
+                        match side {
+                            Side::Left => state.0 -= 1,
+                            Side::Right => state.1 -= 1,
+                        }
+                    }
+                }
 
+                match state {
+                    (1, 1) => self.frames.both.show(),
+                    (1, 0) => self.frames.left.show(),
+                    (0, 1) => self.frames.right.show(),
+                    (0, 0) => self.frames.neutral.show(),
+                    _ => (),
+                }
+                match (previous, state) {
+                    ((a, b), (x, y)) if a > 0 && b > 0 && (x == 0 || y == 0) => self.frames.both.hide(),
+                    ((a, 0), (x, y)) if a > 0 && (x == 0 || y > 0) => self.frames.left.hide(),
+                    ((0, b), (x, y)) if b > 0 && (x > 0 || y == 0) => self.frames.right.hide(),
+                    ((0, 0), (x, y)) if x > 0 || y > 0 => self.frames.neutral.hide(),
+                    _ => (),
+                }
+            }
         }
     }
 }
