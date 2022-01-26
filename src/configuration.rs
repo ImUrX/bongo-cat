@@ -14,15 +14,16 @@ lazy_static! {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
-    images: ImageConfig
+    pub images: ImageConfig
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ImageConfig {
-    neutral: String,
-    left: String,
-    right: String,
-    both: String
+    pub background_color: (u8, u8, u8, u8),
+    pub neutral: String,
+    pub left: String,
+    pub right: String,
+    pub both: String
 }
 
 impl Config {
@@ -34,7 +35,7 @@ impl Config {
     }
 
     pub fn get_config() -> Self {
-        if !CONFIG_PATH.exists() {
+        if !CONFIG_PATH.join(CONFIG_FILENAME).exists() {
             Self::create_config();
         }
         let mut file = fs::File::open(CONFIG_PATH.join(CONFIG_FILENAME)).expect("Config file couldn't be opened");
@@ -48,6 +49,7 @@ impl Default for Config {
     fn default() -> Self {
         Config {
             images: ImageConfig {
+                background_color: (0, 255, 0, 255),
                 neutral: NEUTRAL_DEFAULT.to_string(),
                 left: LEFT_DEFAULT.to_string(),
                 right: RIGHT_DEFAULT.to_string(),

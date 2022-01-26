@@ -9,7 +9,7 @@ repository = "https://github.com/ImUrX/bongo-cat"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-fltk = "^1.2"
+fltk = { version = "^1.2", features = ["fltk-bundled"] }
 dirs = "4.0.0"
 serde = { version = "1.0", features = ["derive"] }
 toml = "0.5"
