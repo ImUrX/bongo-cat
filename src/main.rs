@@ -97,7 +97,7 @@ impl BongoCat {
                 }
             })
         };
-        let mut state = (0, 0);
+        let mut state: (u32, u32) = (0, 0);
         while self.app.wait() {
             if let Some(msg) = self.receiver.recv() {
                 let previous = state.clone();
@@ -117,12 +117,13 @@ impl BongoCat {
                 }
 
                 match state {
-                    (1, 1) => self.frames.both.show(),
-                    (1, 0) => self.frames.left.show(),
-                    (0, 1) => self.frames.right.show(),
+                    (x, y) if x > 0 && y > 0 => self.frames.both.show(),
+                    (x, 0) if x > 0 => self.frames.left.show(),
+                    (0, y) if y > 0 => self.frames.right.show(),
                     (0, 0) => self.frames.neutral.show(),
                     _ => (),
                 }
+
                 match (previous, state) {
                     ((a, b), (x, y)) if a > 0 && b > 0 && (x == 0 || y == 0) => self.frames.both.hide(),
                     ((a, 0), (x, y)) if a > 0 && (x == 0 || y > 0) => self.frames.left.hide(),
