@@ -12,5 +12,5 @@ repository = "https://github.com/ImUrX/bongo-cat"
 fltk = "^1.2"
 dirs = "4.0.0"
 serde = { version = "1.0", features = ["derive"] }
-serde_yaml = "0.8"
+toml = "0.5"
 lazy_static = "1.4.0"
