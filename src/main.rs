@@ -1,7 +1,10 @@
 #[macro_use]
 extern crate lazy_static;
 
-mod config;
+mod configuration;
+use configuration::{Config};
+
 fn main() {
-    println!("Hello, world!");
+    let config = Config::get_config();
+    println!("{:?}", config);
 }

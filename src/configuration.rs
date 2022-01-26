@@ -2,6 +2,7 @@ use serde::{Serialize, Deserialize};
 use std::{fs, path};
 
 const CONFIG_FOLDER: &str = "bongocat/";
+const CONFIG_FILENAME: &str = "config.toml";
 const NEUTRAL_DEFAULT: &str = "neutral.png";
 const LEFT_DEFAULT: &str = "left.png";
 const RIGHT_DEFAULT: &str = "right.png";
@@ -26,12 +27,13 @@ pub struct ImageConfig {
 }
 
 impl Config {
-    pub fn create_config() {
-        if CONFIG_PATH.join("config.toml").exists() {
-            return;
+    pub fn get_config() -> Self {
+        if !CONFIG_PATH.exists() {
+            fs::create_dir_all(CONFIG_PATH.clone()).unwrap();
+            panic!("You need to create the config to make this work!");
         }
-        fs::create_dir_all(CONFIG_PATH.clone()).unwrap();
-
+        let file = fs::File::open(CONFIG_PATH.join(CONFIG_FILENAME)).expect("Config file couldn't be opened");
+        serde_yaml::from_reader(file).unwrap()
     }
 }
 
