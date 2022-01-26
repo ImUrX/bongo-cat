@@ -14,3 +14,4 @@ dirs = "4.0.0"
 serde = { version = "1.0", features = ["derive"] }
 toml = "0.5"
 lazy_static = "1.4.0"
+device_query = { git = "https://github.com/ostrosco/device_query", rev = "7dcd4e5" }
