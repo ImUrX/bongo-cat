@@ -100,7 +100,7 @@ impl BongoCat {
         let mut state: (u32, u32) = (0, 0);
         while self.app.wait() {
             if let Some(msg) = self.receiver.recv() {
-                let previous = state.clone();
+                let previous = state;
                 match msg {
                     State::Down(side) => {
                         match side {

@@ -304,7 +304,7 @@ fn to_local(key: &Keycode) -> KeycodeDef {
 }
 
 pub fn keycode_vec_ser<S: Serializer>(
-    vec: &Vec<Keycode>,
+    vec: &[Keycode],
     serializer: S
 ) -> Result<S::Ok, S::Error> {
     let vec2: Vec<KeycodeDef> = vec.iter().map(to_local).collect();

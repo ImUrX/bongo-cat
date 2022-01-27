@@ -65,20 +65,20 @@ impl Config {
         toml::from_slice(&vec).unwrap()
     }
 
-    pub fn get_path(file: &String) -> path::PathBuf {
+    pub fn get_path(file: &str) -> path::PathBuf {
         CONFIG_PATH.join(file)
     }
 
     pub fn side_of_key(&self, key: &Keycode) -> Option<Side> {
         if self.input.keyboard_left.contains(key) { return Some(Side::Left); }
         if self.input.keyboard_right.contains(key) { return Some(Side::Right); }
-        return None;
+        None
     }
 
     pub fn side_of_button(&self, button: &usize) -> Option<Side> {
         if self.input.mouse_left.contains(button) { return Some(Side::Left); }
         if self.input.mouse_right.contains(button) { return Some(Side::Right); }
-        return None;
+        None
     }
 }
 
@@ -93,8 +93,8 @@ impl Default for Config {
                 both: BOTH_DEFAULT.to_string()
             },
             input: InputConfig {
-                keyboard_left: vec!(Keycode::Z.into(), Keycode::A.into()),
-                keyboard_right: vec!(Keycode::C.into(), Keycode::D.into()),
+                keyboard_left: vec!(Keycode::Z, Keycode::A),
+                keyboard_right: vec!(Keycode::C, Keycode::D),
                 mouse_right: vec!(3),
                 mouse_left: vec!(1)
             }
